@@ -1,0 +1,242 @@
+﻿@page
+@model avto.Pages.ComfortModel
+@{
+    ViewData["Title"] = "Комфорт";
+}
+<div class="containerModel">
+    <h1 class="mt-4">Добро пожаловать в сегмент Комфорт</h1>
+    <p>В этом сегменте вы найдете автомобили, которые обеспечат максимальный комфорт для водителей и пассажиров. Мы подобрали лучшие модели, сочетающие в себе удобство, простор и современные технологии.</p>
+    <h2>Наши предложения включают:</h2>
+    <ol>
+        <li>
+            <b>Компактные автомобили</b> - Идеально подходят для городских поездок, обеспечивая комфортную посадку и удобство в управлении.
+        </li>
+        <li>
+            <b>Седаны</b> - Просторные и удобные, они предлагают высокий уровень комфорта для всех пассажиров.
+        </li>
+        <li>
+            <b>Хэтчбеки</b> - Практичные и удобные, с просторным салоном и множеством функций для комфортного вождения.
+        </li>
+    </ol>
+    <h2>Преимущества покупки автомобиля в нашем комфорт-сегменте:</h2>
+    <ul>
+        <li><b>Комфортное вождение:</b> Наши автомобили оснащены современными системами, которые обеспечивают плавное и приятное вождение.</li>
+        <li><b>Просторный салон:</b> Мы предлагаем модели с просторными салонами, чтобы каждый пассажир чувствовал себя уютно.</li>
+        <li><b>Современные технологии:</b> В наших автомобилях используются передовые технологии для повышения комфорта и безопасности.</li>
+        <li><b>Гарантия качества:</b> Мы тщательно проверяем каждый автомобиль, чтобы гарантировать его отличное состояние и надежность.</li>
+    </ul>
+    <h2 class="mt-5">Популярные модели</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="https://sneg.top/uploads/posts/2023-03/1679307558_sneg-top-p-kamri-na-belom-fone-vkontakte-1.png" class="card-img-top" alt="Toyota camry">
+                <div class="card-body">
+                    <h5 class="card-title">Toyota camry</h5>
+                    <p class="card-text">Ваш идеальный выбор для комфорта и надежности</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="https://sale-cars.ru/upload/iblock/3d3/3d3f370453602ec33af3fe93183b9bcd.png" class="card-img-top" alt="Renault Logan">
+                <div class="card-body">
+                    <h5 class="card-title">Renault Logan II</h5>
+                    <p class="card-text"> Улучшеная версия Практичного и надежного автомобиль с низким расходом топлива и доступной ценой.</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="~/Photo/the_m5.png" class="card-img-top" alt="BMW">
+                <div class="card-body">
+                    <h5 class="card-title">BMW 5 Series</h5>
+                    <p class="card-text">Исключительный комфорт и превосходная производительность</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Модель</th>
+                <th>Год выпуска</th>
+                <th>VIN</th>
+                <th>Цена</th>
+                <th>Доступен</th>
+                <th>Характеристики</th>
+                <th>Категория</th>
+                <th>Изображения</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in Model.Cars)
+            {
+                <tr>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td>@car.Vin</td>
+                    <td>@car.Price</td>
+                    <td>@(car.Available ? "Да" : "Нет")</td>
+                    <td>@car.Characteristics</td>
+                    <td>@car.Category</td>
+                    <td>
+                        @if (car.CarImages.Any())
+                        {
+                            <ul class="list-unstyled">
+                                @foreach (var image in car.CarImages)
+                                {
+                                    <li><img src="@image.ImageUrl" alt="Изображение автомобиля" width="200" /></li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>Нет изображений</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h2 class="mt-5">Контактная форма</h2>
+    <form>
+        <div class="mb-3">
+            <label for="name" class="form-label">Имя</label>
+            <input type="text" class="form-control" id="name" placeholder="Ваше имя">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Ваш email">
+        </div>
+        <div class="mb-3">
+            <label for="message" class="form-label">Сообщение</label>
+            <textarea class="form-control" id="message" rows="3" placeholder="Ваше сообщение"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+
+    </form>
+</div>
+
+
+
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white; /* Задаем белый фон для таблицы */
+    }
+
+        .table th,
+        .table td {
+            border: 1px solid #ddd; /* Рамка ячеек таблицы */
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f2f2f2; /* Цвет фона заголовков */
+        }
+
+        .table td img {
+            display: block;
+            max-width: 100%; /* Максимальная ширина изображений */
+            height: auto;
+            margin: auto; /* Центрирование изображений */
+        }
+
+    .containerModel {
+        background-color: #111; /* Немного светлее черный для контраста */
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .card-img-top {
+        max-height: 200px;
+        object-fit: cover;
+    }
+
+
+    ol {
+        color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    ul {
+        color: #fff;
+    }
+
+    .card-title, .card-text {
+        color: #fff; /* Белый текст внутри карточек */
+    }
+
+    p {
+        color: #fff; /* Белый текст */
+        text-align: center;
+    }
+
+    h1, h2 {
+        color: #fff; /* Белый текст */
+        text-align: center;
+    }
+
+    .card {
+        background-color: #222; /* Темно-серый фон карточки */
+        border: 1px solid #444; /* Темно-серая граница */
+        border-radius: 4px;
+    }
+
+    .card-img-top {
+        max-height: 200px;
+        object-fit: cover;
+    }
+
+    h1, h2 {
+        text-align: center;
+    }
+
+    form .form-control {
+        background-color: #222; /* Темно-серый фон ввода */
+        color: #fff; /* Белый текст */
+        border: 1px solid #444; /* Темно-серая граница */
+    }
+
+    form .form-label {
+        color: #fff;
+    }
+
+    .btn-primary {
+        background-color: #d00; /* Красная кнопка */
+        border: none;
+    }
+
+    ::placeholder {
+        color: #fff !important; /* Белый цвет для текста placeholder */
+        opacity: 1 !important; /* Убедиться, что прозрачность установлена на 100% */
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #fff !important; /* Белый цвет для placeholder в input и textarea */
+        opacity: 1 !important; /* Убедиться, что прозрачность установлена на 100% */
+    }
+
+    .btn-primary:hover {
+        background-color: #f00; /* Светлее красный при наведении */
+    }
+
+    form button {
+        display: block;
+        margin: 20px auto;
+    }
+</style>

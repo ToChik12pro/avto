@@ -1,0 +1,200 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Главная страница";
+}
+
+<h1>AVTO SHOW</h1>
+
+<style>
+   
+
+    .sketchfab-container {
+        position: relative;
+        width: 90vw; /* Ширина контейнера 90% от ширины видимой области */
+        max-width: 1200px; /* Максимальная ширина контейнера */
+        height: 50vh; /* Высота контейнера 50% от высоты видимой области */
+        max-height: 600px; /* Максимальная высота контейнера */
+        overflow: hidden;
+        border-radius: 0; /* Убираем скругления углов */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Тень контейнера */
+        margin-bottom: 20px; /* Отступ снизу для разделения контейнера и кнопок */
+    }
+
+    .sketchfab-embed-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        transform: scale(1.2); /* Увеличение модели в 1.2 раза */
+        transform-origin: center; /* Центрирование увеличения */
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #FFFFFF ;/* Отступ снизу у заголовка */
+    }
+
+
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px; /* Промежуток между кнопками */
+        padding: 10px; /* Внутренний отступ контейнера */
+    }
+
+        .button-container a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none; /* Убираем подчеркивание ссылок */
+        }
+
+        .button-container img {
+            width: 450px; /* Задаем фиксированную ширину */
+            height: 200px; /* Задаем фиксированную высоту */
+            object-fit: cover; /* Обеспечиваем заполнение контейнера */
+             /* Обрамление красной рамкой */
+            margin: 10px;
+        }
+
+            .button-container img:hover {
+                transform: scale(1.1); /* Увеличение кнопки при наведении */
+            }
+
+        .button-container span {
+            margin-top: 5px; /* Отступ сверху для подписи */
+            text-align: center; /* Выравнивание текста по центру */
+            color: #FFFFFF;
+        }
+
+    .swiper-container {
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .swiper-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .swiper-slide img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+    .swiper-pagination {
+        bottom: 10px;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+        color: #fff;
+    }
+</style>
+
+
+<div class="sketchfab-container">
+    <div class="sketchfab-embed-wrapper">
+        <iframe title="Toyota Supra A90"
+                frameborder="0"
+                allowfullscreen
+                mozallowfullscreen="true"
+                webkitallowfullscreen="true"
+                allow="autoplay; fullscreen; xr-spatial-tracking"
+                src="https://sketchfab.com/models/e0ba30f1a99346cb99d2f6ad15dfe2b5/embed?autospin=1&autostart=1&preload=1">
+        </iframe>
+    </div>
+</div>
+
+<h1>Категории авто</h1>
+<div class="button-container">
+    <a asp-page="/Econom">
+        <img src="https://pngimg.com/uploads/niva/niva_PNG44.png" alt="Эконом">
+        <span>Эконом</span>
+    </a>
+    <a asp-page="/Comfort">
+        <img src="https://grizly.club/uploads/posts/2023-08/1693036368_grizly-club-p-kartinki-mashina-bokom-bez-fona-4.png" alt="Комфорт">
+        <span>Комфорт</span>
+    </a>
+    <a asp-page="/Elit">
+        <img src="https://zamena-akkumulyatora.msk.ru/img/akb-porsche-911.png" alt="Элит">
+        <span>Элит</span>
+    </a>
+</div>
+
+<h1>Доступные Авто</h1>
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <img src="https://main-cdn.sbermegamarket.ru/hlr-system/1657928621/600000195960b0.png" alt="Logan">
+        </div>
+        <div class="swiper-slide">
+            <img src="https://nasemashko.by/wp-content/uploads/2018/08/toyota-emblem-e1537453072136-1024x594.png" alt="Camry">
+        </div>
+        <div class="swiper-slide">
+            <img src="https://marque-voiture.com/wp-content/uploads/2015/09/BMW-Logo-1997.png" alt="BMW">
+        </div>
+        <div class="swiper-slide">
+            <img src="https://www.onyxaa.com/images/brand11.webp" alt="Mercedes">
+        </div>
+        <div class="swiper-slide">
+            <img src="https://papik.pro/uploads/posts/2021-11/1636133482_35-papik-pro-p-logotip-sitroen-foto-36.png" alt="citroen">
+        </div>
+        <!-- Добавьте больше слайдов здесь -->
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- Add Navigation -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+</div>
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper('.swiper-container', {
+        slidesPerView: 1,
+        spaceBetween: 10,
+        loop: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+            },
+            768: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+            },
+            1024: {
+                slidesPerView: 4,
+                spaceBetween: 40,
+            },
+        },
+    });
+</script>

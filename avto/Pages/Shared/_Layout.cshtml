@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AvtoShow</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/avto.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+            <div class="container d-flex align-items-center">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="~/Photo/Logo.jpg" alt="Logo" class="logo-img" id="logo" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Index">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Privacy">Конфиденциальность</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Purchase">Покупка автомобиля</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="sideMenu" class="side-menu">
+        <div class="side-menu-header">
+            <button id="closeSideMenu" class="close-btn">&times;</button>
+        </div>
+        <ul class="side-menu-list">
+            <li><a href="#" id="modelsLink">Модели</a></li>
+            <li><a href="#">Покупка автомобиля</a></li>
+            <li><a href="#">Сервис и запчасти</a></li>
+            <!-- Добавьте больше пунктов меню по необходимости -->
+        </ul>
+    </div>
+
+    <div id="modelsSection" class="models-section">
+        <div class="models-section-header">
+            <button id="closeModelsSection" class="close-btn">&times;</button>
+        </div>
+        <div class="models-container">
+            <div class="model">
+                <img src="https://hdpic.club/uploads/posts/2021-11/1636764755_1-hdpic-club-p-logotip-reno-1.png" alt="Renault">
+                <p2>Renault</p2>
+            </div>
+            <div class="model">
+                <img src="https://autoassa.ru/media/gallery/logan.png" alt="Renault">
+                <p2>Renault logan I-поколение 2010 года.</p2>
+            </div>
+            <div class="model">
+                <img src="https://hdpic.club/uploads/posts/2021-11/1636781564_19-hdpic-club-p-reno-sboku-25.png" alt="Logan2">
+                <p>Renault logan II-поколение 2010 года.</p>
+            </div>
+            <div class="model">
+                <img src="https://www.onyxaa.com/images/brand11.webp" alt="Mercedes-benz">
+                <p2>Mercedes-Benz</p2>
+            </div>
+            <div class="model">
+                <img src="https://i.pinimg.com/originals/a0/93/34/a0933404986245b09db83fb2cb618c01.png" alt="Mercedes E Class W222">
+                <p2>Mercedes E Class W222</p2>
+            </div>
+            <div class="model">
+                <img src="~/Photo/G_class.png" alt="Mercedes-benz">
+                <p>Mercedes-Benz G-класс</p>
+            </div>
+            <div class="model">
+                <img src="https://nasemashko.by/wp-content/uploads/2018/08/toyota-emblem-e1537453072136-1024x594.png" alt="Toyota">
+                <p2>Toyota</p2>
+            </div>
+            <div class="model">
+                <img src="https://kursk.business-car.ru/upload/resize_cache/iblock/a05/1474_770_1/dck4bi71l6cyfflww2w88w3jp2cti92z.png" alt="Toyota">
+                <p2>2Toyota Land Cruiser 300.</p2>
+            </div>
+            <div class="model">
+                <img src="~/Photo/Camry-LE_2020.png" alt="Toyota">
+                <p2>Toyota Camry 2020.</p2>
+            </div>
+            <div class="model">
+                <img src="https://marque-voiture.com/wp-content/uploads/2015/09/BMW-Logo-1997.png" alt="Bmw">
+                <p2>BMW</p2>
+            </div>
+
+            <div class="model">
+                <img src="~/Photo/bmw8.png" alt="Bmw">
+                <p2>BMW 8 SERIES COUPE</p2>
+            </div>
+            <div class="model">
+                <img src="~/Photo/bmw5-transformed.png" alt="Bmw">
+                <p2>BMW SERIES M5 </p2>
+            </div>
+
+            <div class="model">
+                <img src=" https://papik.pro/uploads/posts/2021-11/1636133482_35-papik-pro-p-logotip-sitroen-foto-36.png" alt="Citroën">
+                <p2>Citroën</p2>
+            </div>
+            <div class="model">
+                <img src="~/Photo/Citroën.png" alt="Citroën">
+                <p2>Citroën C4</p2>
+            </div>
+            <div class="model">
+                <img src="~/Photo/Citroën2.png" alt="Citroën">
+                <p2>Citroën JUMPY</p2>
+            </div>
+           
+           
+
+
+
+          
+            <!-- Добавьте больше моделей по необходимости -->
+        </div>
+    </div>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - AvtoShow - <a asp-area="" asp-page="/Privacy">Конфиденциальность</a> 
+              
+        </div>
+       
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

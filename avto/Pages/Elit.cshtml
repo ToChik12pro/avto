@@ -1,0 +1,243 @@
+﻿@page
+@model avto.Pages.ElitModel
+@{
+    ViewData["Title"] = "Элит";
+}
+<div class="containerModel">
+    <h1 class="mt-4">Добро пожаловать в сегмент Элит</h1>
+    <p>В этом сегменте вы найдете автомобили премиум-класса, идеально подходящие для тех, кто ценит роскошь, комфорт и передовые технологии. Мы подобрали лучшие модели, которые сочетают в себе элегантный дизайн, мощные характеристики и исключительное качество.</p>
+    <h2>Наши предложения включают:</h2>
+    <ol>
+        <li>
+            <b>Роскошные седаны</b> - Просторные и элегантные, они предлагают высочайший уровень комфорта и изысканности для пассажиров.
+        </li>
+        <li>
+            <b>Спортивные купе</b> - Динамичные и стильные, они обеспечивают превосходную производительность и захватывающее вождение.
+        </li>
+        <li>
+            <b>Элитные внедорожники</b> - Мощные и вместительные, с современными технологиями и роскошными интерьерами для комфортных поездок на любые расстояния.
+        </li>
+    </ol>
+    <h2>Преимущества покупки автомобиля в нашем элит-сегменте:</h2>
+    <ul>
+        <li><b>Высочайший уровень комфорта:</b> Наши автомобили оснащены передовыми системами и высококачественными материалами, обеспечивая непревзойденный комфорт для водителя и пассажиров.</li>
+        <li><b>Современные технологии:</b> Мы предлагаем модели с новейшими инновациями, от систем помощи водителю до премиальных аудиосистем и инфотейнмент комплексов.</li>
+        <li><b>Превосходная производительность:</b> Мощные двигатели и передовые инженерные решения гарантируют отличную динамику и надежность на дороге.</li>
+        <li><b>Гарантия качества:</b> Мы тщательно проверяем каждый автомобиль, чтобы гарантировать его отличное состояние и долговечность, предоставляя уверенность в каждой поездке.</li>
+    </ul>
+
+
+
+
+    <h2 class="mt-5">Популярные модели</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="~/Photo/The m8.png" class="card-img-top" alt="bmw 8 series">
+                <div class="card-body">
+                    <h5 class="card-title">BMW 8 series</h5>
+                    <p class="card-text">Воплощение роскоши и мощности.</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="https://www.theautochannel.com/news/2019/03/11/655463-mercedes-amg-s-65-final-edition-exclusive-collector-s-item.1-lg.png" class="card-img-top" alt="Mercedes-Benz S-Class">
+                <div class="card-body">
+                    <h5 class="card-title">Mercedes-Benz S-Class</h5>
+                    <p class="card-text">Вершина роскоши и инноваций</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="https://kong-proxy-intranet.toyota-europe.com/c1-images/resize/ccis/1280x1280/zip/kz/configurationtype/visual-for-grade-selector/product-token/5303ee79-d983-45bf-aaa0-3ecff6039d36/grade/2659a022-5fa8-43f8-84cd-57a59d24ae6d/body/30b0ef55-504f-4ce5-8f54-6856b2e8aa20/fallback/true/padding/50,50,50,50/image-quality/70/day-exterior-4.png" class="card-img-top" alt="Toyota Land Cruiser 300">
+                <div class="card-body">
+                    <h5 class="card-title">Toyota Land Cruiser 300</h5>
+                    <p class="card-text">Ваш надежный спутник на любой дороге.</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Модель</th>
+                <th>Год выпуска</th>
+                <th>VIN</th>
+                <th>Цена</th>
+                <th>Доступен</th>
+                <th>Характеристики</th>
+                <th>Категория</th>
+                <th>Изображения</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in Model.Cars)
+            {
+                <tr>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td>@car.Vin</td>
+                    <td>@car.Price</td>
+                    <td>@(car.Available ? "Да" : "Нет")</td>
+                    <td>@car.Characteristics</td>
+                    <td>@car.Category</td>
+                    <td>
+                        @if (car.CarImages.Any())
+                        {
+                            <ul class="list-unstyled">
+                                @foreach (var image in car.CarImages)
+                                {
+                                    <li><img src="@image.ImageUrl" alt="Изображение автомобиля" width="200" /></li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>Нет изображений</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h2 class="mt-5">Контактная форма</h2>
+    <form>
+        <div class="mb-3">
+            <label for="name" class="form-label">Имя</label>
+            <input type="text" class="form-control" id="name" placeholder="Ваше имя">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Ваш email">
+        </div>
+        <div class="mb-3">
+            <label for="message" class="form-label">Сообщение</label>
+            <textarea class="form-control" id="message" rows="3" placeholder="Ваше сообщение"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+</div>
+
+
+
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white; /* Задаем белый фон для таблицы */
+    }
+
+        .table th,
+        .table td {
+            border: 1px solid #ddd; /* Рамка ячеек таблицы */
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f2f2f2; /* Цвет фона заголовков */
+        }
+
+        .table td img {
+            display: block;
+            max-width: 100%; /* Максимальная ширина изображений */
+            height: auto;
+            margin: auto; /* Центрирование изображений */
+        }
+    .containerModel {
+        background-color: #111; /* Немного светлее черный для контраста */
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .card-img-top {
+        max-height: 200px;
+        object-fit: cover;
+    }
+
+
+    ol {
+        color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    ul {
+        color: #fff;
+    }
+
+    .card-title, .card-text {
+        color: #fff; /* Белый текст внутри карточек */
+    }
+
+    p {
+        color: #fff; /* Белый текст */
+        text-align: center;
+    }
+
+    h1, h2 {
+        color: #fff; /* Белый текст */
+        text-align: center;
+    }
+
+    .card {
+        background-color: #222; /* Темно-серый фон карточки */
+        border: 1px solid #444; /* Темно-серая граница */
+        border-radius: 4px;
+    }
+
+    .card-img-top {
+        max-height: 200px;
+        object-fit: cover;
+    }
+
+    h1, h2 {
+        text-align: center;
+    }
+
+    form .form-control {
+        background-color: #222; /* Темно-серый фон ввода */
+        color: #fff; /* Белый текст */
+        border: 1px solid #444; /* Темно-серая граница */
+    }
+
+    form .form-label {
+        color: #fff;
+    }
+
+    .btn-primary {
+        background-color: #d00; /* Красная кнопка */
+        border: none;
+    }
+
+    ::placeholder {
+        color: #fff !important; /* Белый цвет для текста placeholder */
+        opacity: 1 !important; /* Убедиться, что прозрачность установлена на 100% */
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #fff !important; /* Белый цвет для placeholder в input и textarea */
+        opacity: 1 !important; /* Убедиться, что прозрачность установлена на 100% */
+    }
+
+    .btn-primary:hover {
+        background-color: #f00; /* Светлее красный при наведении */
+    }
+
+    form button {
+        display: block;
+        margin: 20px auto;
+    }
+</style>
