@@ -7,8 +7,14 @@
 <h1>AVTO SHOW</h1>
 
 <style>
-   
 
+    .alert {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+        display: none; /* Скрыть по умолчанию */
+    }
     .sketchfab-container {
         position: relative;
         width: 90vw; /* Ширина контейнера 90% от ширины видимой области */
@@ -109,6 +115,12 @@
         color: #fff;
     }
 </style>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info" id="message-alert">
+        @TempData["Message"]
+    </div>
+}
 
 
 <div class="sketchfab-container">
@@ -167,8 +179,9 @@
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
 </div>
-
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
 <script>
     const swiper = new Swiper('.swiper-container', {
         slidesPerView: 1,
@@ -196,5 +209,12 @@
                 spaceBetween: 40,
             },
         },
+    });
+    $(document).ready(function () {
+        // Если есть сообщение, показать его и скрыть через 5 секунд
+        var messageAlert = $('#message-alert');
+        if (messageAlert.length) {
+            messageAlert.fadeIn().delay(5000).fadeOut(); // 5000 мс = 5 секунд
+        }
     });
 </script>

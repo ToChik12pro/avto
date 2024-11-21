@@ -3,6 +3,27 @@
 @{
     ViewData["Title"] = "Эконом";
 }
+@{
+    // Проверяем, есть ли сообщение об успехе в TempData
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div id="successMessage" class="alert alert-success" role="alert">
+        @successMessage
+    </div>
+
+    <script>
+        // Автоматически скрыть сообщение через 5 секунд
+        setTimeout(function () {
+            var successMessageElement = document.getElementById("successMessage");
+            if (successMessageElement) {
+                successMessageElement.style.display = "none";
+            }
+        }, 5000); // 5000 миллисекунд = 5 секунд
+    </script>
+}
 <div class="containerModel">
     <h1 class="mt-4">Добро пожаловать в сегмент эконом</h1>
     <p>В этом сегменте вы найдете доступные автомобили, идеально подходящие для экономных водителей. Мы подобрали лучшие модели, которые сочетают в себе надежность и низкие эксплуатационные расходы.</p>
@@ -76,48 +97,65 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var car in Model.Cars)
+            @if (Model.Cars != null)
+            {
+                @foreach (var car in Model.Cars)
+                {
+                    <tr>
+                        <td>@car.Model</td>
+                        <td>@car.Year</td>
+                        <td>@car.Vin</td>
+                        <td>@car.Price</td>
+                        <td>@(car.Available ? "Да" : "Нет")</td>
+                        <td>@car.Characteristics</td>
+                        <td>@car.Category</td>
+                        <td>
+                            @if (car.CarImages != null && car.CarImages.Any())
+                            {
+                                <ul class="list-unstyled">
+                                    @foreach (var image in car.CarImages)
+                                    {
+                                        <li><img src="@image.ImageUrl" alt="Изображение автомобиля" width="200" /></li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span>Нет изображений</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@car.Model</td>
-                    <td>@car.Year</td>
-                    <td>@car.Vin</td>
-                    <td>@car.Price</td>
-                    <td>@(car.Available ? "Да" : "Нет")</td>
-                    <td>@car.Characteristics</td>
-                    <td>@car.Category</td>
-                    <td>
-                        @if (car.CarImages.Any())
-                        {
-                            <ul class="list-unstyled">
-                                @foreach (var image in car.CarImages)
-                                {
-                                    <li><img src="@image.ImageUrl" alt="Изображение автомобиля" width="200" /></li>
-                                }
-                            </ul>
-                        }
-                        else
-                        {
-                            <span>Нет изображений</span>
-                        }
-                    </td>
+                    <td colspan="8">Нет данных для отображения</td>
                 </tr>
             }
         </tbody>
     </table>
     <h2 class="mt-5">Контактная форма</h2>
-    <form>
+    <form method="post">
         <div class="mb-3">
             <label for="name" class="form-label">Имя</label>
-            <input type="text" class="form-control" id="name" placeholder="Ваше имя">
+            <input type="text" class="form-control" id="name" placeholder="Ваше имя" name="Name">
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Ваш email">
+            <input type="email" class="form-control" id="email" placeholder="Ваш email" name="Email">
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">Телефон</label>
+            <input type="text" class="form-control" id="phone" placeholder="Ваш телефон" name="Phone">
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label">Адрес</label>
+            <input type="text" class="form-control" id="address" placeholder="Ваш адрес" name="Address">
         </div>
         <div class="mb-3">
             <label for="message" class="form-label">Сообщение</label>
-            <textarea class="form-control" id="message" rows="3" placeholder="Ваше сообщение"></textarea>
+            <textarea class="form-control" id="message" rows="3" placeholder="Ваше сообщение" name="Message"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Отправить</button>
     </form>

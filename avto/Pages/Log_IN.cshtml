@@ -1,0 +1,184 @@
+﻿@page
+@model avto.Pages.Log_INModel
+@{
+    ViewData["Title"] = "Вход";
+}
+<div class="containerModel">
+    <div class="sketchfab-container" style="width: 100%; height: 500px; overflow: hidden;">
+        <div class="sketchfab-embed-wrapper" style="width: 100%; height: 100%;">
+            <iframe title="Dodge Charger Daytona SRT Banshee 2024"
+                    frameborder="0"
+                    allowfullscreen
+                    mozallowfullscreen="true"
+                    webkitallowfullscreen="true"
+                    allow="autoplay; fullscreen; xr-spatial-tracking"
+                    src="https://sketchfab.com/models/26fbe324e52140c08174131ce6e3183e/embed?ui_controls=0&ui_infos=0&ui_hint=0&autospin=0&autostart=1"
+                    style="width: 100%; height: 100%;">
+            </iframe>
+        </div>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info" id="message-alert">
+            @TempData["Message"]
+        </div>
+    }
+
+
+    <h2>Вход</h2>
+
+    <div class="containerModel">
+        <form method="post">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-white" asp-for="Input.UserName">Имя пользователя:</label>
+                <div class="col-sm-10">
+                    <input asp-for="Input.UserName" class="form-control" />
+                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-white" asp-for="Input.Password">Пароль:</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <input asp-for="Input.Password" type="password" class="form-control" id="password" />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
+                                <i class="fa fa-eye" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <div class="form-check">
+                        <input asp-for="Input.RememberMe" class="form-check-input" />
+                        <label class="form-check-label text-white" asp-for="Input.RememberMe">Запомнить меня</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <a href="/Register" class="text-white">Еще нет аккаунта? Зарегистрируйтесь</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .sketchfab-container {
+        position: relative;
+        width: 90vw;
+        max-width: 1200px;
+        height: 50vh;
+        max-height: 600px;
+        overflow: hidden;
+        border-radius: 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .sketchfab-embed-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        transform: scale(1.2);
+        transform-origin: center;
+    }
+
+    h2 {
+        color: #fff;
+    }
+
+    .containerModel {
+        background-color: #111;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .form-group label {
+        color: #fff;
+    }
+
+    .form-group .form-control {
+        background-color: #222;
+        color: #fff;
+        border: 1px solid #444;
+    }
+
+    .form-group .text-danger {
+        color: #ff4c4c;
+    }
+
+    .btn-primary {
+        background-color: #d00;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #f00;
+        }
+
+    ::placeholder {
+        color: #fff !important;
+        opacity: 1 !important;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #fff !important;
+        opacity: 1 !important;
+    }
+
+    .input-group-append .btn-outline-secondary {
+        background-color: #444;
+        color: #fff;
+        border: none;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+    function togglePasswordVisibility() {
+        const passwordField = document.getElementById("password");
+        const toggleIcon = document.getElementById("toggleIcon");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
+        } else {
+            passwordField.type = "password";
+            toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
+        }
+    }
+    $(document).ready(function () {
+        // Если есть сообщение, показать его и скрыть через 5 секунд
+        var messageAlert = $('#message-alert');
+        if (messageAlert.length) {
+            messageAlert.fadeIn().delay(5000).fadeOut(); // 5000 мс = 5 секунд
+        }
+    });
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

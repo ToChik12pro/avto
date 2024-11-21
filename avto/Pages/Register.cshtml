@@ -1,0 +1,198 @@
+﻿@page
+@model avto.Pages.RegisterModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<div class="containerModel">
+    <div class="sketchfab-container">
+        <div class="sketchfab-embed-wrapper">
+            <iframe title="Toyota Land Cruiser 2021"
+                    frameborder="0"
+                    allowfullscreen
+                    mozallowfullscreen="true"
+                    webkitallowfullscreen="true"
+                    allow="autoplay; fullscreen; xr-spatial-tracking"
+                    src="https://sketchfab.com/models/066d2a37f1e34c63a68a7cffd9e20a49/embed?ui_controls=0&ui_infos=0&ui_hint=0&autospin=1&autostart=1"
+                    style="width: 100%; height: 100%;"></iframe>
+        </div>
+    </div>
+
+    <h2>Регистрация</h2>
+
+    <!-- Сообщения об ошибках -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (ViewData.ModelState.ErrorCount > 0)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Input.Username">Имя пользователя</label>
+            <input asp-for="Input.Username" class="form-control" placeholder="Введите имя пользователя" />
+            <span asp-validation-for="Input.Username" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Email">Электронная почта</label>
+            <input asp-for="Input.Email" class="form-control" placeholder="Введите email" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Password">Пароль</label>
+            <div class="input-group">
+                <input asp-for="Input.Password" type="password" class="form-control" id="password" placeholder="Введите пароль" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('password', 'toggleIconPassword')">
+                        <i class="fa fa-eye" id="toggleIconPassword"></i>
+                    </button>
+                </div>
+            </div>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.ConfirmPassword">Подтверждение пароля</label>
+            <div class="input-group">
+                <input asp-for="Input.ConfirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Повторите пароль" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('confirmPassword', 'toggleIconConfirmPassword')">
+                        <i class="fa fa-eye" id="toggleIconConfirmPassword"></i>
+                    </button>
+                </div>
+            </div>
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Phone">Телефон</label>
+            <input asp-for="Input.Phone" class="form-control" placeholder="Введите номер телефона" />
+            <span asp-validation-for="Input.Phone" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Address">Адрес</label>
+            <input asp-for="Input.Address" class="form-control" placeholder="Введите адрес" />
+            <span asp-validation-for="Input.Address" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    </form>
+</div>
+
+<style>
+
+    /* Стили контейнера для модели */
+    .sketchfab-container {
+        position: relative;
+        width: 90vw;
+        max-width: 1200px;
+        height: 50vh;
+        max-height: 600px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .sketchfab-embed-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        transform: scale(1.5); /* Увеличение модели */
+        transform-origin: center;
+    }
+
+    /* Стили заголовков и контейнера */
+    h2 {
+        color: #fff;
+    }
+
+    .containerModel {
+        background-color: #111;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    /* Стиль для полей формы */
+    .form-group label {
+        color: #fff;
+    }
+
+    .form-group .form-control {
+        background-color: #222;
+        color: #fff;
+        border: 1px solid #444;
+    }
+
+    .form-group .text-danger {
+        color: #ff4c4c;
+    }
+
+    /* Стили кнопки */
+    .btn-primary {
+        background-color: #d00;
+        border: none;
+        margin-top: 10px;
+    }
+
+        .btn-primary:hover {
+            background-color: #f00;
+        }
+
+    /* Стили плейсхолдера */
+    ::placeholder {
+        color: #fff !important;
+    }
+
+    input::placeholder {
+        color: #fff !important;
+    }
+
+    /* Стили для иконок пароля */
+    .input-group-append .btn-outline-secondary {
+        background-color: #444;
+        color: #fff;
+        border: none;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
+        function togglePasswordVisibility(passwordFieldId, iconId) {
+            const passwordField = document.getElementById(passwordFieldId);
+            const toggleIcon = document.getElementById(iconId);
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

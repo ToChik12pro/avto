@@ -44,6 +44,19 @@ footer {
     border-top: 2px solid white;
     color: white;
 }
+.navbar-nav .dropdown-menu {
+    background-color: #800000; /* Цвет выпадающего меню */
+    border: none;
+}
+
+.navbar-nav .dropdown-item {
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+    .navbar-nav .dropdown-item:hover {
+        background-color: #a00000;
+    }
 
 .navbar {
     background: linear-gradient(135deg, black, red);
@@ -178,6 +191,18 @@ footer {
     transition: left 0.3s ease;
     z-index: 1000;
 }
+.nav-link i {
+    border-radius: 50%;
+    background-color: #8B0000; /* Темно-красный цвет под тему сайта */
+    padding: 10px;
+    color: white; /* Белый цвет иконки */
+    font-size: 1.5rem; /* Размер иконки */
+    transition: background-color 0.3s ease;
+}
+
+    .nav-link i:hover {
+        background-color: #B22222; /* Цвет при наведении, более светлый красный */
+    }
 
 .models-section {
     position: fixed;
@@ -203,6 +228,25 @@ footer {
     background: none;
     border: none;
 }
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #000;
+    font-size: 16px;
+}
+
+    .user-info .btn-outline-danger {
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: 0.3s;
+    }
+
+        .user-info .btn-outline-danger:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
 
 @media (min-width: 768px) {
     .models-section {

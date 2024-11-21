@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using avto.DataBase;
@@ -11,9 +12,11 @@ using avto.DataBase;
 namespace avto.Migrations
 {
     [DbContext(typeof(CarDealershipDbContext))]
-    partial class CarDealershipDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241121071812_MOUS")]
+    partial class MOUS
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

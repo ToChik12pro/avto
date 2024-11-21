@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using avto.DataBase;
@@ -11,9 +12,11 @@ using avto.DataBase;
 namespace avto.Migrations
 {
     [DbContext(typeof(CarDealershipDbContext))]
-    partial class CarDealershipDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241121070130_AddMessageToClient")]
+    partial class AddMessageToClient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,6 +115,7 @@ namespace avto.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("Message")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -131,6 +135,8 @@ namespace avto.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Clients");
                 });
@@ -346,6 +352,17 @@ namespace avto.Migrations
                         .IsRequired();
 
                     b.Navigation("Car");
+                });
+
+            modelBuilder.Entity("avto.DataBase.Client", b =>
+                {
+                    b.HasOne("avto.DataBase.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("avto.DataBase.InventoryMovement", b =>

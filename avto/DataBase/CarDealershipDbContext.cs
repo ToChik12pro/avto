@@ -92,7 +92,11 @@ namespace avto.DataBase
                 entity.HasIndex(e => e.Email).IsUnique();
                 entity.Property(e => e.Phone).HasMaxLength(15);
                 entity.Property(e => e.Address).HasColumnType("text");
-                entity.HasOne(e => e.User).WithMany().HasForeignKey(e => e.UserId);
+                entity.HasOne(e => e.User)
+             .WithMany() // Если у пользователя есть коллекция клиентов, то можно указать .WithMany(u => u.Clients)
+             .HasForeignKey(e => e.UserId)
+             .OnDelete(DeleteBehavior.SetNull);
+
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -205,15 +209,17 @@ namespace avto.DataBase
     public class Client
     {
         public int ClientId { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
 
+        public string? Message { get; set; }  // Новое поле для хранения сообщения
         public User User { get; set; }
-    }
 
+
+    }
     public class Order
     {
         public int OrderId { get; set; }
