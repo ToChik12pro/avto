@@ -68,7 +68,7 @@ namespace avto.Pages
             await _context.SaveChangesAsync();
 
             // Устанавливаем сообщение об успехе в TempData
-            TempData["SuccessMessage"] = "Ваш запрос отправлен менеджером AVTOSHOW, ожидайте ответа.";
+            TempData["SuccessMessage"] = "Ваш запрос отправлен менеджероам AVTOSHOW, ожидайте ответа.";
 
             // Перенаправляем на текущую страницу, чтобы обновить данные и показать сообщение
             return RedirectToPage();
