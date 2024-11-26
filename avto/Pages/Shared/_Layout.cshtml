@@ -29,8 +29,9 @@
                             <a class="nav-link" asp-area="" asp-page="/Privacy">Конфиденциальность</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Purchase">Покупка автомобиля</a>
+                            <a class="nav-link" asp-area="" asp-page="/Byu">Покупка автомобиля</a>
                         </li>
+ 
                         <!-- Добавляем иконку человечка -->
                         <li class="nav-item dropdown">
                             @if (User.Identity.IsAuthenticated)
@@ -42,6 +43,13 @@
                                     <li>
                                         <a class="dropdown-item" asp-page="/Log_Out">Выйти</a>
                                     </li>
+                                    <!-- Добавляем проверку роли для отображения ссылки CRM -->
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Menedger"))
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-page="/CRM">CRM</a>
+                                        </li>
+                                    }
                                 </ul>
                             }
                             else
@@ -159,10 +167,12 @@
         </div>
        
     </footer>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+   
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

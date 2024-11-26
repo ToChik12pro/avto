@@ -1,0 +1,76 @@
+﻿@model List<avto.DataBase.User>
+
+<h2>Список пользователей</h2>
+
+
+@if (Model != null && Model.Any())
+{
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Имя пользователя</th>
+                <th>Email</th>
+                <th>Телефон</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.Email</td>
+                    <td>@user.Phone</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Нет данных для отображения.</p>
+}
+
+<style>
+
+
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 18px;
+        text-align: left;
+        background-color: #222;
+        color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .styled-table thead tr {
+        background-color: #333;
+        color: #fff;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    .styled-table th, .styled-table td {
+        padding: 20px 25px;  /* Увеличены отступы внутри ячеек */
+        border: 1px solid #444;
+    }
+
+    .styled-table tbody tr {
+        border-bottom: 1px solid #444;
+    }
+
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #2a2a2a;
+    }
+
+    .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #333;
+    }
+
+    .styled-table tbody tr:hover {
+        background-color: #444;
+        cursor: pointer;
+    }
+</style>

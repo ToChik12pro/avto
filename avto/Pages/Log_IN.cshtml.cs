@@ -48,22 +48,44 @@ namespace avto.Pages
                 return Page();
             }
 
-            // Поиск пользователя
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == Input.UserName);
+            // Загрузка пользователя с ролями
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.Username == Input.UserName);
+
             if (user != null && BCrypt.Net.BCrypt.Verify(Input.Password, user.Password))
             {
-                // Установка cookie после успешного входа
+                // Проверка на наличие роли с RoleId = 1
+                var hasManagerRole = user.UserRoles.Any(ur => ur.RoleId == 1);
+
+                // Создаем claims
                 var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())  // Добавление UserId
             };
+
+                // Добавляем роли в claims
+                foreach (var role in user.UserRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role.Role.RoleName));
+                }
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+                // Устанавливаем cookie
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
-                return RedirectToPage("/Index");  // Перенаправление на главную
+                // Перенаправление в зависимости от роли
+                if (hasManagerRole)
+                {
+                    return RedirectToPage("/CRM");
+                }
+
+                return RedirectToPage("/Index");
             }
 
             ModelState.AddModelError(string.Empty, "Неверное имя пользователя или пароль.");

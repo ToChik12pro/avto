@@ -1,0 +1,164 @@
+﻿@page
+@model CRMPageModel
+@{
+    ViewData["Title"] = "CRM - Управление автосалоном";
+}
+
+<div class="containerModel">
+    <header class="crm-header">
+        <h1>CRM для Автосалона</h1>
+        <p>Управляйте данными о пользователях, автомобилях, клиентах и заказах в одном месте.</p>
+    </header>
+
+    <div class="dashboard">
+        <div class="dashboard-item" data-section="Users">
+            <h3>Пользователи</h3>
+            <p>Управляйте учетными записями сотрудников.</p>
+        </div>
+        <div class="dashboard-item" data-section="Clients">
+            <h3>Клиенты</h3>
+            <p>Список клиентов и их контактные данные.</p>
+        </div>
+        <div class="dashboard-item" data-section="Cars">
+            <h3>Автомобили</h3>
+            <p>Каталог доступных автомобилей.</p>
+        </div>
+        <div class="dashboard-item" data-section="Orders">
+            <h3>Заказы</h3>
+            <p>Просмотр, обработка и создание заказов.</p>
+        </div>
+    </div>
+
+    <div id="contentSection" class="content-section">
+        <p>Выберите раздел для отображения информации.</p>
+    </div>
+
+    <footer class="crm-footer">
+        <p>&copy; 2024 Автосалон. Все права защищены.</p>
+    </footer>
+</div>
+
+<!-- Пример индикатора загрузки -->
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".dashboard-item").click(function () {
+                const section = $(this).data("section");
+
+                // Загружаем содержимое секции
+                $.ajax({
+                    url: '@Url.Page("CRM", "Section")',
+                    data: { section: section },
+                    type: 'GET',
+                    success: function (data) {
+                        $('#contentSection').html(data).fadeIn(); // Анимация появления
+                    },
+                    error: function (error) {
+                        console.error('Ошибка загрузки данных:', error);
+                        alert('Ошибка при загрузке данных.');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<style>
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 18px;
+        text-align: left;
+        background-color: #222;
+        color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .styled-table thead tr {
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .styled-table th, .styled-table td {
+            padding: 12px 15px;
+            border: 1px solid #444;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid #444;
+        }
+
+            .styled-table tbody tr:nth-of-type(even) {
+                background-color: #2a2a2a;
+            }
+
+            .styled-table tbody tr:last-of-type {
+                border-bottom: 2px solid #333;
+            }
+
+            .styled-table tbody tr:hover {
+                background-color: #444;
+                cursor: pointer;
+            }
+    .containerModel {
+        background-color: #111;
+        padding: 30px;
+        border-radius: 12px;
+        color: #fff;
+    }
+
+    .crm-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .dashboard-item {
+        background-color: #222;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        transition: transform 0.3s;
+        cursor: pointer;
+    }
+
+    .dashboard-item:hover {
+        transform: scale(1.05);
+        background-color: #333;
+    }
+
+    .content-section {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #222;
+        border-radius: 8px;
+    }
+
+    .crm-footer {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 14px;
+    }
+
+    /* Индикатор загрузки */
+   
+
+    /* Анимация вращения */
+    keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
