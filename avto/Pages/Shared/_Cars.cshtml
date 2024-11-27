@@ -1,70 +1,388 @@
 ﻿@model List<avto.DataBase.Car>
 
 <h2>Автомобили</h2>
-<table class="styled-table">
+
+<!-- Фильтры -->
+<div class="filter-container">
+    <!-- Диапазон цен -->
+    <div>
+        <strong>Диапазон цен: </strong>
+        <span id="priceRangeMin">0 руб.</span> - <span id="priceRangeMax">1,000,000,000 руб.</span>
+    </div>
+
+    <!-- Ползунки диапазона цен -->
+    <div class="range-inputs">
+        <input type="range" id="priceMin" min="0" max="1000000000" value="0" step="10000" oninput="updatePriceRange()">
+        <input type="range" id="priceMax" min="0" max="1000000000" value="1000000000" step="10000" oninput="updatePriceRange()">
+    </div>
+</div>
+
+<!-- Поиск -->
+<div style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+    <input type="text" id="searchInput" placeholder="Поиск..." onkeyup="filterTable()">
+    <button onclick="resetFilters()">Сбросить фильтры</button>
+</div>
+
+<!-- Таблица -->
+<table class="styled-table" id="carTable">
     <thead>
         <tr>
-            <th>Модель</th>
-            <th>Год</th>
-            <th>VIN</th>
-            <th>Цена</th>
-            <th>Категория</th>
+            <th>Фото</th>
+            <th onclick="sortTable(1)">Модель</th>
+            <th onclick="sortTable(2)">Год</th>
+            <th onclick="sortTable(3)">Цена</th>
+            <th onclick="sortTable(4)">Цена с акцией</th>
+            <th onclick="sortTable(5)">Категория</th>
+            <th>Акция</th>
+            <th>Детали</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var car in Model)
         {
-            <tr>
+            Random random = new Random();
+            int discountPercent = random.Next(5, 15);
+            int giftValue = random.Next(2000, 5000);
+            string promo;
+            decimal finalPrice;
+
+            if (car.Price > 20000)
+            {
+                promo = $"Скидка {discountPercent}%";
+                finalPrice = car.Price - (car.Price * discountPercent / 100);
+            }
+            else
+            {
+                promo = $"Подарок на {giftValue} руб.";
+                finalPrice = car.Price;
+            }
+
+            string imageUrl = car.CarImages?.FirstOrDefault()?.ImageUrl ?? "placeholder.jpg";
+
+            <tr class="car-row @(car.Price < 10000 ? "promotion" : "")" onclick="selectRow(this)">
+                <td>
+                    <img src="@imageUrl" alt="Фото @car.Model" class="car-image" />
+                </td>
                 <td>@car.Model</td>
                 <td>@car.Year</td>
-                <td>@car.Vin</td>
-                <td>@car.Price</td>
+                <td>@car.Price руб.</td>
+                <td>@finalPrice руб.</td>
                 <td>@car.Category</td>
+                <td>@promo</td>
+                <td>
+                    <button onclick="showDetails('@car.Model', '@car.Year', '@car.Vin', '@car.Price', '@finalPrice', '@car.Category', '@promo', '@imageUrl')" class="details-btn">Детали</button>
+                </td>
             </tr>
         }
     </tbody>
 </table>
-<style>
 
+<!-- Модальное окно -->
+<div id="detailsModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Детали автомобиля</h2>
+        <div class="modal-body">
+            <div class="modal-text">
+                <p id="detailsContent"></p>
+            </div>
+            <div class="modal-image">
+                <img id="detailsImage" src="" alt="Фото автомобиля">
+            </div>
+        </div>
+    </div>
+</div>
 
-.styled-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 18px;
-    text-align: left;
-    background-color: #222;
-    color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-}
+  <style>
+    /* Общие стили */
+    body {
+        font-family: 'Roboto', sans-serif;
+        color: #e0e0e0;
+        margin: 0;
+        padding: 20px;
+        background: inherit; /* Сохраняем фон сайта */
+    }
 
-.styled-table thead tr {
-    background-color: #333;
-    color: #fff;
-    text-align: left;
-    font-weight: bold;
-}
+    h2 {
+        color: #ff4b5c;
+        text-align: center;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    }
 
-.styled-table th, .styled-table td {
-    padding: 20px 25px;  /* Увеличены отступы внутри ячеек */
-    border: 1px solid #444;
-}
+    /* Фильтры */
+    .filter-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+        align-items: center;
+    }
 
-.styled-table tbody tr {
-    border-bottom: 1px solid #444;
-}
+        .filter-container div {
+            font-size: 16px;
+        }
 
-.styled-table tbody tr:nth-of-type(even) {
-    background-color: #2a2a2a;
-}
+    .range-inputs {
+        display: flex;
+        gap: 10px;
+    }
 
-.styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #333;
-}
+    input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 8px;
+        background: linear-gradient(to right, #ff4b5c, #1d1d1d);
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+    }
 
-.styled-table tbody tr:hover {
-    background-color: #444;
-    cursor: pointer;
-}
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ff4b5c;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+    input[type="checkbox"] {
+        margin-right: 5px;
+        transform: scale(1.2);
+        cursor: pointer;
+    }
+
+    input[type="text"] {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        background: linear-gradient(90deg, #ff4b5c, #d13a48);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #ff3a4b;
+        }
+
+    /* Таблица */
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+        margin-bottom: 30px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+        .styled-table thead tr {
+            background: linear-gradient(90deg, #ff4b5c, #333);
+            color: white;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .styled-table th, .styled-table td {
+            padding: 12px;
+            border-bottom: 1px solid #444;
+        }
+
+        .styled-table tbody tr {
+            background-color: rgba(43, 43, 43, 0.8);
+            border-bottom: 1px solid #444;
+        }
+
+            .styled-table tbody tr:nth-of-type(even) {
+                background-color: rgba(50, 50, 50, 0.8);
+            }
+
+            .styled-table tbody tr:hover {
+                background-color: rgba(60, 60, 60, 0.9);
+                transition: background-color 0.3s ease;
+            }
+
+    .car-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .car-image:hover {
+            transform: scale(1.1);
+        }
+
+    /* Модальное окно */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .modal-content {
+        background-color: #333; /* Темный фон для контента */
+        padding: 20px;
+        border-radius: 10px;
+        width: 60%;
+        max-width: 800px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+        color: #e0e0e0;
+        position: relative;
+    }
+
+    .modal-body {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .modal-text {
+        flex: 1;
+        font-size: 18px;
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    .modal-image {
+        flex: 1;
+        max-width: 300px;
+    }
+
+        .modal-image img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #e0e0e0;
+    }
+
+        .close:hover {
+            color: #ff4b5c;
+        }
+
 </style>
+
+
+<script>
+    // Функция для отображения модального окна с деталями
+    function showDetails(model, year, vin, price, finalPrice, category, promo, imageUrl) {
+        var detailsContent = `
+                    <strong>Модель:</strong> ${model}<br>
+                    <strong>Год:</strong> ${year}<br>
+                    <strong>VIN:</strong> ${vin}<br>
+                    <strong>Цена:</strong> ${price} руб.<br>
+                    <strong>Цена с акцией:</strong> ${finalPrice} руб.<br>
+                    <strong>Категория:</strong> ${category}<br>
+                    <strong>Акция:</strong> ${promo}<br>
+                `;
+        document.getElementById('detailsContent').innerHTML = detailsContent;
+        document.getElementById('detailsImage').src = imageUrl;
+        document.getElementById('detailsModal').style.display = 'flex';  // Открыть модальное окно
+    }
+
+    // Функция для закрытия модального окна
+    function closeModal(event) {
+        event.stopPropagation(); // Останавливает распространение события, чтобы не закрыть окно при клике внутри
+        document.getElementById('detailsModal').style.display = 'none'; // Скрывает модальное окно
+    }
+
+    // Обновление диапазона цен
+    function updatePriceRange() {
+        var minPrice = document.getElementById('priceMin').value;
+        var maxPrice = document.getElementById('priceMax').value;
+
+        // Обновляем отображаемые значения
+        document.getElementById('priceRangeMin').textContent = minPrice + ' руб.';
+        document.getElementById('priceRangeMax').textContent = maxPrice + ' руб.';
+
+        var table = document.getElementById("carTable");
+        var tr = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < tr.length; i++) {
+            var td = tr[i].getElementsByTagName("td");
+            var priceCell = td[3];  // Цена в 4-й колонке
+
+            if (priceCell) {
+                var price = parseInt(priceCell.textContent.replace(" руб.", "").trim(), 10);
+                tr[i].style.display = (price >= minPrice && price <= maxPrice) ? "" : "none";
+            }
+        }
+    }
+
+    // Фильтрация таблицы по строкам (поиск)
+    function filterTable() {
+        var input = document.getElementById("searchInput");
+        var filter = input.value.toLowerCase();
+        var table = document.getElementById("carTable");
+        var tr = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < tr.length; i++) {
+            var td = tr[i].getElementsByTagName("td");
+            var found = false;
+
+            for (var j = 0; j < td.length; j++) {
+                if (td[j] && td[j].innerText.toLowerCase().indexOf(filter) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+
+            tr[i].style.display = found ? "" : "none";
+        }
+    }
+
+    // Функция для сброса всех фильтров
+    function resetFilters() {
+        // Сбрасываем значения ползунков
+        document.getElementById('priceMin').value = document.getElementById('priceMin').min;
+        document.getElementById('priceMax').value = document.getElementById('priceMax').max;
+
+        // Обновляем отображаемые значения цен
+        updatePriceRange();
+
+        // Очищаем строку поиска
+        document.getElementById('searchInput').value = '';
+
+        // Показываем все строки таблицы
+        var table = document.getElementById("carTable");
+        var tr = table.getElementsByTagName("tr");
+        for (var i = 1; i < tr.length; i++) {
+            tr[i].style.display = '';
+        }
+    }
+
+    // Обработчик для закрытия модального окна при клике на фон
+    document.getElementById('detailsModal').addEventListener('click', function (event) {
+        // Закрывает окно только если клик произошел на фон (не внутри модального контента)
+        if (event.target === this) {
+            closeModal(event);
+        }
+    });
+</script>

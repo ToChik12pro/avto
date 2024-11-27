@@ -7,61 +7,204 @@
             <th>Имя</th>
             <th>Email</th>
             <th>Телефон</th>
-           
+            <th>Настроение</th>
+            <th>Позвонили</th>
+            <th>Комментарий</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var client in Model)
         {
-            <tr>
+            <tr id="clientRow-@client.Email">
                 <td>@client.Name</td>
                 <td>@client.Email</td>
                 <td>@client.Phone</td>
+                <td>
+                    <input type="range" id="moodRange-@client.Email" min="0" max="100" value="50"
+                           oninput="updateMood('@client.Email')" />
+                    <span id="moodValue-@client.Email">50</span>
+                </td>
+                <td>
+                    <input type="checkbox" id="callMade-@client.Email" onclick="toggleCallStatus('@client.Email')" />
+                    <label for="callMade-@client.Email">Позвонили</label>
+                </td>
+                <td>
+                    <textarea id="comment-@client.Email" placeholder="Напишите комментарий..."
+                              oninput="saveComment('@client.Email')"></textarea>
+                    <button onclick="showCommentMessage('@client.Email')">💾</button>
+                </td>
             </tr>
         }
     </tbody>
 </table>
-<style>
 
+<!-- CSS для стилизации таблицы и элементов -->
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        color: #e0e0e0;
+        margin: 0;
+        padding: 20px;
+        background: inherit; /* Сохраняем фон сайта */
+    }
+
+    h2 {
+        color: #ff4b5c;
+        text-align: center;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    }
 
     .styled-table {
         width: 100%;
         border-collapse: collapse;
         margin: 20px 0;
-        font-size: 18px;
+        font-size: 16px;
         text-align: left;
-        background-color: #222;
-        color: #fff;
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
 
-    .styled-table thead tr {
-        background-color: #333;
-        color: #fff;
-        text-align: left;
-        font-weight: bold;
-    }
+        .styled-table thead tr {
+            background: linear-gradient(90deg, #ff4b5c, #333);
+            color: #fff;
+            font-weight: bold;
+        }
 
-    .styled-table th, .styled-table td {
-        padding: 20px 25px;  /* Увеличены отступы внутри ячеек */
-        border: 1px solid #444;
-    }
+        .styled-table th,
+        .styled-table td {
+            padding: 15px 20px;
+            border: 1px solid #444;
+        }
 
-    .styled-table tbody tr {
-        border-bottom: 1px solid #444;
-    }
+        .styled-table tbody tr {
+            background-color: rgba(43, 43, 43, 0.8);
+            border-bottom: 1px solid #444;
+        }
 
-    .styled-table tbody tr:nth-of-type(even) {
-        background-color: #2a2a2a;
-    }
+            .styled-table tbody tr:nth-of-type(even) {
+                background-color: rgba(50, 50, 50, 0.8);
+            }
 
-    .styled-table tbody tr:last-of-type {
-        border-bottom: 2px solid #333;
-    }
+            .styled-table tbody tr:hover {
+                background-color: rgba(60, 60, 60, 0.9);
+                transition: background-color 0.3s ease;
+            }
 
-    .styled-table tbody tr:hover {
-        background-color: #444;
+    input[type="range"] {
+        width: 100%;
+        appearance: none;
+        background: linear-gradient(to right, #ff4b5c, #1d1d1d);
+        height: 8px;
+        border-radius: 5px;
+        outline: none;
         cursor: pointer;
     }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ff4b5c;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+    input[type="checkbox"] {
+        margin-right: 5px;
+        transform: scale(1.2);
+        cursor: pointer;
+    }
+
+    textarea {
+        width: 100%;
+        background: #222;
+        border: 1px solid #444;
+        border-radius: 8px;
+        padding: 10px;
+        color: #fff;
+        resize: none;
+        font-size: 14px;
+        transition: border-color 0.2s ease;
+    }
+
+        textarea:focus {
+            border-color: #ff4b5c;
+            outline: none;
+        }
+
+    button {
+        background: linear-gradient(90deg, #ff4b5c, #d13a48);
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        button:hover {
+            background: #ff3a4b;
+        }
 </style>
+<script>
+    function updateMood(clientEmail) {
+        var moodRange = document.getElementById("moodRange-" + clientEmail);
+        var moodValue = document.getElementById("moodValue-" + clientEmail);
+        var mood = moodRange.value;
+
+        // Обновляем отображаемое значение настроения
+        moodValue.textContent = mood;
+
+        // Изменяем цвет строки таблицы в зависимости от настроения
+        var row = document.getElementById("clientRow-" + clientEmail);
+        row.style.backgroundColor = getMoodColor(mood);
+
+        // Сохраняем настроение в LocalStorage
+        localStorage.setItem("mood-" + clientEmail, mood);
+    }
+
+    // Получаем цвет строки в зависимости от настроения
+    function getMoodColor(mood) {
+        if (mood < 30) {
+            return "rgba(255, 75, 92, 0.3)"; // Красный
+        } else if (mood < 60) {
+            return "rgba(255, 255, 0, 0.3)"; // Жёлтый
+        } else {
+            return "rgba(0, 255, 0, 0.3)"; // Зелёный
+        }
+    }
+
+    // При загрузке страницы восстанавливаем сохранённые данные
+    window.onload = function () {
+        var clients = @Html.Raw(Json.Serialize(Model));
+
+        clients.forEach(function (client) {
+            // Восстановить настроение
+            var savedMood = localStorage.getItem("mood-" + client.Email);
+            if (savedMood !== null) {
+                var moodRange = document.getElementById("moodRange-" + client.Email);
+                var moodValue = document.getElementById("moodValue-" + client.Email);
+                var row = document.getElementById("clientRow-" + client.Email);
+
+                moodRange.value = savedMood;
+                moodValue.textContent = savedMood;
+                row.style.backgroundColor = getMoodColor(savedMood);
+            }
+
+            // Восстановить статус звонка
+            var callStatus = localStorage.getItem("callStatus-" + client.Email);
+            if (callStatus !== null) {
+                document.getElementById("callMade-" + client.Email).checked = (callStatus === 'true');
+            }
+
+            // Восстановить комментарий
+            var savedComment = localStorage.getItem("comment-" + client.Email);
+            if (savedComment !== null) {
+                document.getElementById("comment-" + client.Email).value = savedComment;
+            }
+        });
+    };
+</script>
