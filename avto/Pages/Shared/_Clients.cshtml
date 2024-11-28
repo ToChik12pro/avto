@@ -1,6 +1,21 @@
 ﻿@model List<avto.DataBase.Client>
 
 <h2>Клиенты</h2>
+<div class="filter-container">
+    <input type="text" id="searchInput" placeholder="Поиск по имени или email..." oninput="filterTable()" />
+    <select id="moodFilter" onchange="filterTable()">
+        <option value="all">Все настроения</option>
+        <option value="low">Плохое (0-30)</option>
+        <option value="medium">Среднее (31-60)</option>
+        <option value="high">Хорошее (61-100)</option>
+    </select>
+    <select id="callFilter" onchange="filterTable()">
+        <option value="all">Все</option>
+        <option value="called">Позвонили</option>
+        <option value="notCalled">Не звонили</option>
+    </select>
+</div>
+
 <table class="styled-table">
     <thead>
         <tr>
@@ -12,7 +27,7 @@
             <th>Комментарий</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="clientTableBody">
         @foreach (var client in Model)
         {
             <tr id="clientRow-@client.Email">
@@ -148,8 +163,63 @@
         button:hover {
             background: #ff3a4b;
         }
+
+    <style >
+    .filter-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        justify-content: center;
+    }
+
+    .filter-container input,
+    .filter-container select {
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #444;
+        border-radius: 8px;
+        background: #222;
+        color: #fff;
+        transition: border-color 0.2s ease;
+        width: 200px;
+    }
+
+        .filter-container input:focus,
+        .filter-container select:focus {
+            border-color: #ff4b5c;
+            outline: none;
+        }
 </style>
+
 <script>
+   
+    function filterTable() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const moodFilter = document.getElementById('moodFilter').value;
+        const callFilter = document.getElementById('callFilter').value;
+        const rows = document.querySelectorAll('#clientTableBody tr');
+
+        rows.forEach(row => {
+            const name = row.children[0].textContent.toLowerCase();
+            const email = row.children[1].textContent.toLowerCase();
+            const moodValue = parseInt(row.querySelector('input[type="range"]').value);
+            const isCalled = row.querySelector('input[type="checkbox"]').checked;
+
+            let matchesSearch = name.includes(searchInput) || email.includes(searchInput);
+            let matchesMood =
+                moodFilter === 'all' ||
+                (moodFilter === 'low' && moodValue < 30) ||
+                (moodFilter === 'medium' && moodValue >= 30 && moodValue <= 60) ||
+                (moodFilter === 'high' && moodValue > 60);
+            let matchesCall =
+                callFilter === 'all' ||
+                (callFilter === 'called' && isCalled) ||
+                (callFilter === 'notCalled' && !isCalled);
+
+            row.style.display = matchesSearch && matchesMood && matchesCall ? '' : 'none';
+        });
+    }
+
     function updateMood(clientEmail) {
         var moodRange = document.getElementById("moodRange-" + clientEmail);
         var moodValue = document.getElementById("moodValue-" + clientEmail);
