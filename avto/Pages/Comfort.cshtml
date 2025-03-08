@@ -61,7 +61,9 @@
         </div>
         <div class="col-md-4">
             <div class="card mb-4">
-                <img src="https://sale-cars.ru/upload/iblock/3d3/3d3f370453602ec33af3fe93183b9bcd.png" class="card-img-top" alt="Renault Logan">
+                <img src="https://res-console.cloudinary.com/dfgh3xl1r/media_explorer_thumbnails/a131949d777df5cc9ab9690de4f1dd97/detailed"
+                     class="card-img-top custom-img"
+                     alt="Renault Logan">
                 <div class="card-body">
                     <h5 class="card-title">Renault Logan II</h5>
                     <p class="card-text"> Улучшеная версия Практичного и надежного автомобиль с низким расходом топлива и доступной ценой.</p>
@@ -186,6 +188,14 @@
             height: auto;
             margin: auto; /* Центрирование изображений */
         }
+
+    .custom-img {
+        width: 180px; /* Подбери ширину под боковые авто */
+        height: 120px; /* Уменьши высоту */
+        object-fit: cover; /* Чтобы картинка не искажалась */
+        display: block;
+        margin: 0 auto;
+    }
 
     .containerModel {
         background-color: #111; /* Немного светлее черный для контраста */

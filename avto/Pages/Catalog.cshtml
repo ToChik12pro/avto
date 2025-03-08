@@ -1,0 +1,137 @@
+﻿@page
+@model avto.Pages.CatalogModel
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+<h2>Каталог автомобилей</h2>
+
+<!-- Search Bar -->
+<div class="mb-4">
+    <input type="text" id="searchInput" class="form-control" placeholder="Поиск по моделям..." onkeyup="filterCars()">
+</div>
+
+<div class="row" id="carCatalog">
+    @foreach (var car in Model.Cars)
+    {
+        <div class="col-md-4 car-item">
+            <div class="card mb-4" style="display: flex; flex-direction: column; height: 100%; transition: transform 0.3s ease;">
+                <!-- Display the first car image -->
+                <img src="@car.CarImages.FirstOrDefault()?.ImageUrl" class="card-img-top" alt="@car.Model" style="max-height: 200px; object-fit: cover;">
+                <div class="card-body" style="flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                    <h5 class="card-title">@car.Model</h5>
+                    <p class="card-text">@car.Characteristics</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    /* General Styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        background-color: #222;
+        border: 1px solid #444;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .card:hover {
+        transform: translateY(-10px); /* Lift the card on hover */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+        max-height: 200px;
+        object-fit: cover;
+        transition: opacity 0.3s ease;
+    }
+
+    .card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 15px;
+        color: #fff;
+        text-align: center;
+    }
+
+    .btn-primary {
+        background-color: #d00;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #f00;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .car-item {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+
+    /* Filtered Item Hidden */
+    .hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    /* Responsive Design */
+    media (max-width: 768px) {
+        .col-md-4 {
+            max-width: 100% !important;
+        }
+    }
+</style>
+
+<script>
+    // Client-side Search Functionality
+    function filterCars() {
+        var searchInput = document.getElementById('searchInput').value.toLowerCase();
+        var carItems = document.querySelectorAll('.car-item');
+
+        carItems.forEach(function (item) {
+            var carTitle = item.querySelector('.card-title').textContent.toLowerCase();
+            if (carTitle.includes(searchInput)) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        });
+    }
+
+    // Optional: Animate card hover effects
+    document.querySelectorAll('.card').forEach(function (card) {
+        card.addEventListener('mouseenter', function () {
+            card.style.transform = 'scale(1.05)';
+        });
+        card.addEventListener('mouseleave', function () {
+            card.style.transform = 'scale(1)';
+        });
+    });
+</script>
